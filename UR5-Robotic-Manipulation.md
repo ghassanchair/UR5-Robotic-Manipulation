@@ -1,63 +1,72 @@
-# 🦾 Projet de Manipulateur de Robot UR5
+# 🦾 UR5 Robot Manipulator Project
 
-Modélisation, simulation et commande d'un bras manipulateur robotique UR5 à 6 degrés de liberté.
+Modeling, simulation and control of a 6-degree-of-freedom UR5 robotic manipulator arm.
 
 ---
 
-## 📌 Sommaire
+## 📌 Table of Contents
 1. [Introduction](#1-introduction)
-2. [Objectifs du Projet](#2-objectifs-du-projet)
-3. [Étude Théorique](#3-étude-théorique)
-   - [3.1. Description et Structure Mécanique du Robot](#31-description-et-structure-mécanique-du-robot)
-   - [3.2. Modélisation Cinématique](#32-modélisation-cinématique)
-     - [A. Paramètres de Denavit-Hartenberg (DH)](#a-paramètres-de-denavit-hartenberg-dh)
-     - [B. Modèle Cinématique Direct (MGD)](#b-modèle-cinématique-direct-mgd)
-     - [C. Modèle Cinématique Inverse (MGI)](#c-modèle-cinématique-inverse-mgi)
-   - [3.3. Analyse de l'Espace de Travail et Singularités](#33-analyse-de-lespace-de-travail-workspace-et-singularités)
-     - [A. Définition de l'espace de travail](#a-définition-de-lespace-de-travail)
-     - [B. Analyse des singularités](#b-analyse-des-singularités)
-   - [3.4. Modélisation Dynamique](#34-modélisation-dynamique)
-     - [A. Équation Fondamentale (Formalisme de Lagrange)](#a-équation-fondamentale-formalisme-de-lagrange)
-     - [B. Dynamique Inverse et Directe](#b-dynamique-inverse-et-directe)
-4. [Partie Simulation](#4-partie-simulation)
-5. [Conclusion et Perspectives](#5-conclusion-et-perspectives)
+2. [Project Objectives](#2-project-objectives)
+3. [Theoretical Study](#3-theoretical-study)
+   - [3.1. Robot Description and Mechanical Structure](#31-robot-description-and-mechanical-structure)
+   - [3.2. Kinematic Modeling](#32-kinematic-modeling)
+     - [A. Denavit-Hartenberg (DH) Parameters](#a-denavit-hartenberg-dh-parameters)
+     - [B. Forward Kinematic Model (FKM)](#b-forward-kinematic-model-fkm)
+     - [C. Inverse Kinematic Model (IKM)](#c-inverse-kinematic-model-ikm)
+   - [3.3. Workspace and Singularity Analysis](#33-workspace-and-singularity-analysis)
+     - [A. Workspace Definition](#a-workspace-definition)
+     - [B. Singularity Analysis](#b-singularity-analysis)
+   - [3.4. Dynamic Modeling](#34-dynamic-modeling)
+     - [A. Fundamental Equation (Lagrange Formalism)](#a-fundamental-equation-lagrange-formalism)
+     - [B. Inverse and Forward Dynamics](#b-inverse-and-forward-dynamics)
+4. [Simulation](#4-simulation)
+   - [4.1. Environment and Objective](#41-environment-and-objective)
+   - [4.2. Model Architecture](#42-model-architecture)
+   - [4.3. Operating Principle](#43-operating-principle)
+   - [4.4. Simulation Steps](#44-simulation-steps)
+   - [4.5. Results to Present](#45-results-to-present)
+   - [4.6. Evaluation Criteria](#46-evaluation-criteria)
+5. [Conclusion and Outlook](#5-conclusion-and-outlook)
+   - [5.1. Conclusion](#51-conclusion)
+   - [5.2. Limitations](#52-limitations)
+   - [5.3. Future Work](#53-future-work)
 
 ---
 
 ## 1. Introduction
 
-Ce projet se concentre sur la modélisation, la simulation et la commande du bras manipulateur robotique **UR5**, un robot industriel collaboratif à **6 degrés de liberté (6-DOF)** développé par Universal Robots.
+This project focuses on the modeling, simulation and control of the **UR5** robotic manipulator arm, a collaborative industrial robot with **6 degrees of freedom (6-DOF)** developed by Universal Robots.
 
-L'objectif principal est de comprendre le comportement d'un manipulateur robotique à travers l'étude approfondie de sa **cinématique** et de sa **dynamique**, ainsi que l'implémentation d'une stratégie de commande par couple calculé, validée par simulation sous MATLAB / Simulink.
-
----
-
-## 2. Objectifs du Projet
-
-Les principaux objectifs de ce projet sont les suivants :
-* Comprendre l'architecture mécanique du robot UR5 et ses articulations.
-* Développer le modèle cinématique direct (MGD).
-* Étudier le problème de la cinématique inverse (MGI).
-* Analyser l'espace de travail (workspace) du robot et ses limites géométriques.
-* Développer le modèle dynamique complet du robot.
-* Implémenter une stratégie de commande adaptée.
-* Simuler le robot sous MATLAB / Simulink.
-* Analyser et évaluer rigoureusement les résultats de simulation.
+The main objective is to understand the behavior of a robotic manipulator through an in-depth study of its **kinematics** and **dynamics**, as well as to implement a computed torque control strategy, validated by simulation in MATLAB / Simulink.
 
 ---
 
-## 3. Étude Théorique
+## 2. Project Objectives
 
-Cette section présente les fondements mathématiques et théoriques régissant le comportement géométrique, cinématique et dynamique du manipulateur UR5.
+The main objectives of this project are:
+* Understand the mechanical architecture of the UR5 robot and its joints.
+* Develop the forward kinematic model (FKM).
+* Study the inverse kinematics problem (IKM).
+* Analyze the robot's workspace and its geometric limits.
+* Develop the complete dynamic model of the robot.
+* Implement a suitable control strategy.
+* Simulate the robot in MATLAB / Simulink.
+* Rigorously analyze and evaluate the simulation results.
 
-### 3.1. Description et Structure Mécanique du Robot
-L'UR5 est un manipulateur série doté de **six articulations rotoïdes**. Ses six degrés de liberté lui permettent de contrôler de manière indépendante la position et l'orientation de son effecteur final dans l'espace tridimensionnel (**3** mouvements de translation et **3** mouvements de rotation).
+---
 
-### 3.2. Modélisation Cinématique
+## 3. Theoretical Study
 
-#### A. Paramètres de Denavit-Hartenberg (DH)
+This section presents the mathematical and theoretical foundations governing the geometric, kinematic and dynamic behavior of the UR5 manipulator.
 
-La convention de Denavit-Hartenberg est utilisée pour décrire la relation géométrique entre les liaisons consécutives du robot à l'aide de quatre paramètres : la longueur du lien (`aᵢ`), la torsion du lien (`αᵢ`), le décalage de lien (`dᵢ`) et l'angle articulaire (`θᵢ`). La matrice de transformation homogène élémentaire entre deux liaisons consécutives `i-1` et `i` s'exprime sous la forme :
+### 3.1. Robot Description and Mechanical Structure
+The UR5 is a serial manipulator with **six revolute joints**. Its six degrees of freedom allow it to independently control the position and orientation of its end effector in three-dimensional space (**3** translational motions and **3** rotational motions).
+
+### 3.2. Kinematic Modeling
+
+#### A. Denavit-Hartenberg (DH) Parameters
+
+The Denavit-Hartenberg convention is used to describe the geometric relationship between consecutive links of the robot using four parameters: link length (`aᵢ`), link twist (`αᵢ`), link offset (`dᵢ`) and joint angle (`θᵢ`). The elementary homogeneous transformation matrix between two consecutive links `i-1` and `i` is expressed as:
 
 ```text
         ┌                                                          ┐
@@ -68,171 +77,188 @@ La convention de Denavit-Hartenberg est utilisée pour décrire la relation géo
         └                                                          ┘
 ```
 
-#### B. Modèle Cinématique Direct (MGD)
-Le MGD permet de déterminer la position et l'orientation de l'effecteur final en fonction des variables articulaires q = [q₁, q₂, q₃, q₄, q₅, q₆]ᵀ. La matrice de transformation globale est obtenue par la multiplication successive des matrices de transformation individuelles :<br>
+#### B. Forward Kinematic Model (FKM)
+The FKM determines the position and orientation of the end effector as a function of the joint variables q = [q₁, q₂, q₃, q₄, q₅, q₆]ᵀ. The global transformation matrix is obtained by successively multiplying the individual transformation matrices:<br>
 ⁰T₆ = A₁ · A₂ · A₃ · A₄ · A₅ · A₆
 
-#### C. Modèle Cinématique Inverse (MGI)
-Le MGI résout le problème inverse consistant à trouver les angles articulaires nécessaires pour atteindre une pose (position et orientation) désirée de l'effecteur. L'approche numérique s'appuie sur la matrice Jacobienne J(q) reliant les vitesses articulaires aux vitesses cartésiennes (Ẋ = J(q)·q̇), en utilisant des méthodes itératives basées sur le pseudo-inverse ou la minimisation des moindres carrés amortis pour gérer la convergence et la stabilité près des singularités.
+#### C. Inverse Kinematic Model (IKM)
+The IKM solves the inverse problem of finding the joint angles required to reach a desired pose (position and orientation) of the end effector. The numerical approach relies on the Jacobian matrix J(q), which relates joint velocities to Cartesian velocities (Ẋ = J(q)·q̇), using iterative methods based on the pseudo-inverse or damped least squares to ensure convergence and stability near singularities.
 
-### 3.3. Analyse de l'Espace de Travail (Workspace) et Singularités
+### 3.3. Workspace and Singularity Analysis
 
-#### A. Définition de l'espace de travail
-L'espace de travail représente l'ensemble des positions que l'effecteur du robot peut atteindre en respectant les limites mécaniques et articulaires des liaisons :<br>
+#### A. Workspace Definition
+The workspace is the set of positions the robot's end effector can reach while respecting the mechanical and joint limits of the links:<br>
 W = { P(q) ∈ ℝ³ | q ∈ Q }<br>
-Où Q est l'ensemble des configurations articulaires admissibles définies par les limites de chaque articulation :<br>
+Where Q is the set of admissible joint configurations defined by the limits of each joint:<br>
 qᵢ,ₘᵢₙ ≤ qᵢ ≤ qᵢ,ₘₐₓ
 
-On distingue :
-* **L'espace accessible** : ensemble de toutes les positions pouvant être atteintes avec au moins une configuration articulaire.
-* **L'espace dextre** : ensemble des positions où l'effecteur peut atteindre n'importe quelle orientation requise.
+A distinction is made between:
+* **The reachable workspace**: the set of all positions that can be reached with at least one joint configuration.
+* **The dexterous workspace**: the set of positions where the end effector can achieve any required orientation.
 
-#### B. Analyse des singularités
-Une singularité est une configuration géométrique où la matrice Jacobienne J(q) perd son rang (son déterminant s'annule : det(J(q)) = 0).
+#### B. Singularity Analysis
+A singularity is a geometric configuration in which the Jacobian matrix J(q) loses rank (its determinant vanishes: det(J(q)) = 0).
 
-* **Conséquences** : perte de degrés de liberté instantanés, vitesses articulaires tendant vers l'infini pour des mouvements cartésiens normaux, et instabilité numérique de la cinématique inverse.
+* **Consequences**: loss of instantaneous degrees of freedom, joint velocities tending to infinity for normal Cartesian motions, and numerical instability of the inverse kinematics.
 
-* **Principaux types sur l'UR5** :
-   1. **Singularité d'épaule** : le centre du poignet se trouve sur l'axe de l'articulation 1.
-   2. **Singularité de coude** : alignement du bras et de l'avant-bras (bras tendu ou replié).
-   3. **Singularité de poignet** : alignement des axes des articulations 4 et 6.
+* **Main types on the UR5**:
+   1. **Shoulder singularity**: the wrist center lies on the axis of joint 1.
+   2. **Elbow singularity**: alignment of the upper arm and forearm (arm fully extended or folded).
+   3. **Wrist singularity**: alignment of the axes of joints 4 and 6.
 
-* **Indicateur de suivi** : l'évaluation du nombre de condition de la Jacobienne κ(J) = σₘₐₓ / σₘᵢₙ permet de détecter l'approche d'une configuration singulière.
+* **Monitoring indicator**: evaluating the condition number of the Jacobian κ(J) = σₘₐₓ / σₘᵢₙ makes it possible to detect the approach of a singular configuration.
 
-### 3.4. Modélisation Dynamique
-La dynamique établit la relation mathématique entre les forces/couples appliqués et les mouvements générés, en prenant en compte les masses, les centres d'inertie et les forces de Coriolis.
+### 3.4. Dynamic Modeling
+Dynamics establishes the mathematical relationship between the applied forces/torques and the resulting motions, taking into account masses, centers of inertia and Coriolis forces.
 
-#### A. Équation Fondamentale (Formalisme de Lagrange)
-L'équation générale du mouvement pour un robot à n degrés de liberté s'écrit sous la forme :<br>
+#### A. Fundamental Equation (Lagrange Formalism)
+The general equation of motion for a robot with n degrees of freedom is written as:<br>
 M(q)·q̈ + C(q, q̇)·q̇ + G(q) = τ<br>
-Où :
+Where:
 
-* **M(q)** : matrice d'inertie (symétrique et définie positive).
-* **C(q, q̇)** : matrice des forces de Coriolis et centrifuges.
-* **G(q)** : vecteur des couples de gravité compensant le poids des liens.
-* **τ** : vecteur des couples appliqués aux articulations.
+* **M(q)**: inertia matrix (symmetric and positive definite).
+* **C(q, q̇)**: matrix of Coriolis and centrifugal forces.
+* **G(q)**: vector of gravity torques compensating the weight of the links.
+* **τ**: vector of torques applied to the joints.
 
-#### B. Dynamique Inverse et Directe
-* **Dynamique inverse** : calcule les couples τ nécessaires pour suivre une référence (q, q̇, q̈). Très utile pour la commande et le dimensionnement des moteurs.
-* **Dynamique directe** : calcule les accélérations résultantes q̈ en fonction des couples appliqués τ :<br>
+#### B. Inverse and Forward Dynamics
+* **Inverse dynamics**: computes the torques τ required to follow a reference (q, q̇, q̈). Very useful for control and motor sizing.
+* **Forward dynamics**: computes the resulting accelerations q̈ as a function of the applied torques τ:<br>
 q̈ = M(q)⁻¹ · [ τ - C(q, q̇)·q̇ - G(q) ]
 
 ---
-## 4. Partie Simulation
+## 4. Simulation
 
-### 4.1. Environnement et objectif
+### 4.1. Environment and Objective
 
-La simulation est réalisée sous **MATLAB / Simulink** avec la **Robotics System Toolbox** et **Simscape Multibody**. Elle porte sur deux aspects du robot UR5 :
+The simulation is carried out in **MATLAB / Simulink** with the **Robotics System Toolbox** and **Simscape Multibody**. It covers two aspects of the UR5 robot:
 
-* **la cinématique** : calcul de la pose de l'effecteur (MGD), puis retour aux angles articulaires (MGI) ;
-* **la dynamique** : commande par couple calculé et réponse du robot sous l'effet des couples appliqués.
+* **kinematics**: computing the end-effector pose (FKM), then returning to the joint angles (IKM);
+* **dynamics**: computed torque control and the robot's response to the applied torques.
 
 ![UR5-Robotic-Manipulation](Images/Block_im.png)
-*Figure 4.1 : Modèle Simulink (cinématique et dynamique du UR5)*
+*Figure 4.1: Simulink model (UR5 kinematics and dynamics)*
 
-### 4.2. Architecture du modèle
+### 4.2. Model Architecture
 
-Le modèle se compose de deux parties reliées en chaîne.
+The model consists of two parts connected in a chain.
 
-**Partie 1 : Cinématique**
+**Part 1: Kinematics**
 
-| Bloc | Rôle |
+| Block | Role |
 |---|---|
-| **q1** (constante 1×6) | Configuration articulaire de départ à tester |
-| **Transformation Matrix computation** | MGD : calcule la matrice de transformation ⁰T₆ à partir de q1 |
-| **q0** (constante 1×6) | Estimation initiale du solveur de MGI |
-| **Weights** (constante 1×6) | Poids de l'orientation et de la position dans la MGI |
-| **Inverse Kinematics** (EE : tool0) | MGI : retrouve la configuration articulaire désirée $q_d$ à partir de la pose |
+| **q1** (1×6 constant) | Starting joint configuration to be tested |
+| **Transformation Matrix computation** | FKM: computes the transformation matrix ⁰T₆ from q1 |
+| **q0** (1×6 constant) | Initial guess for the IKM solver |
+| **Weights** (1×6 constant) | Orientation and position weights in the IKM |
+| **Inverse Kinematics** (EE: tool0) | IKM: recovers the desired joint configuration $q_d$ from the pose |
 
-**Partie 2 : Dynamique et commande**
+**Part 2: Dynamics and Control**
 
-| Bloc | Rôle |
+| Block | Role |
 |---|---|
-| **Computed Torque Controller** | Calcule les couples à appliquer |
-| **UR5 Robot Model** | Dynamique directe du robot |
-| **Scope** | Compare les signaux désirés et mesurés |
-| **Sorties $\dot q$ et $\ddot q$** | Vitesses et accélérations articulaires du robot |
+| **Computed Torque Controller** | Computes the torques to apply |
+| **UR5 Robot Model** | Forward dynamics of the robot |
+| **Scope** | Compares desired and measured signals |
+| **Outputs $\dot q$ and $\ddot q$** | Joint velocities and accelerations of the robot |
 
-*Entrées du contrôleur :*
-* *Desired Configuration* : $q_d$ fournie par la MGI ;
-* *Measured Configuration* : $q$ mesurée sur le robot ;
-* *Measured Velocities* : $\dot q$ mesurée sur le robot.
+*Controller inputs:*
+* *Desired Configuration*: $q_d$ provided by the IKM;
+* *Measured Configuration*: $q$ measured on the robot;
+* *Measured Velocities*: $\dot q$ measured on the robot.
 
-*Sortie du contrôleur :* *Applied Torque* $\tau$, envoyé au robot.
+*Controller output:* *Applied Torque* $\tau$, sent to the robot.
 
-### 4.3. Principe de fonctionnement
+### 4.3. Operating Principle
 
-1. **MGD** : la configuration q1 est convertie en pose cartésienne de l'effecteur :
+1. **FKM**: the configuration q1 is converted into a Cartesian end-effector pose:
    $${}^0T_6 = A_1 A_2 A_3 A_4 A_5 A_6$$
-2. **MGI** : cette pose est transmise au solveur, qui retrouve la configuration désirée $q_d$ en partant de q0 :
+2. **IKM**: this pose is passed to the solver, which recovers the desired configuration $q_d$ starting from q0:
    $$FK(q_d) \approx {}^0T_6$$
-3. **Commande** : le contrôleur compare $q_d$ à la configuration mesurée $q$ et calcule les couples :
+3. **Control**: the controller compares $q_d$ to the measured configuration $q$ and computes the torques:
    $$\tau = M(q)\,v + C(q,\dot q)\dot q + G(q)$$
    $$v = \ddot q_d + K_d(\dot q_d - \dot q) + K_p(q_d - q)$$
-4. **Dynamique** : le robot applique les couples $\tau$ et fournit en retour $q$, $\dot q$ et $\ddot q$ :
+4. **Dynamics**: the robot applies the torques $\tau$ and returns $q$, $\dot q$ and $\ddot q$:
    $$\ddot q = M(q)^{-1}\left[\tau - C(q,\dot q)\dot q - G(q)\right]$$
-5. **Boucle de retour** : $q$ et $\dot q$ sont renvoyés au contrôleur, ce qui ferme la boucle.
+5. **Feedback loop**: $q$ and $\dot q$ are fed back to the controller, closing the loop.
 
-### 4.4. Étapes de la simulation
+### 4.4. Simulation Steps
 
-**Étape 1 : Définir le modèle du robot.** Charger le UR5 et l'affecter aux blocs de cinématique :
+**Step 1: Define the robot model.** Load the UR5 and assign it to the kinematics blocks:
 ```matlab
 robot = loadrobot("universalUR5", DataFormat="row");
 ```
 
-**Étape 2 : Régler les blocs de cinématique.**
-* Dans *Transformation Matrix computation* : choisir le corps cible `tool0` (le bloc est actuellement en *Target : world*, ce qui donne toujours l'identité).
-* Dans *Inverse Kinematics* : vérifier l'effecteur `tool0` et saisir les poids.
+**Step 2: Configure the kinematics blocks.**
+* In *Transformation Matrix computation*: choose the target body `tool0` (the block is currently set to *Target: world*, which always yields the identity).
+* In *Inverse Kinematics*: check the end effector `tool0` and enter the weights.
 
-**Étape 3 : Définir les constantes.**
+**Step 3: Define the constants.**
 ```matlab
-q0 = zeros(1,6);                          % estimation initiale
-q1 = [pi/4 -pi/3 pi/4 -pi/4 pi/3 0];      % configuration à atteindre
+q0 = zeros(1,6);                          % initial guess
+q1 = [pi/4 -pi/3 pi/4 -pi/4 pi/3 0];      % configuration to reach
 weights = [1 1 1 1 1 1];         % [orientation position]
 ```
 
-**Étape 4 : Régler le contrôleur.** Choisir les gains $K_p$ et $K_d$ du *Computed Torque Controller*, puis fixer le temps de simulation et le pas de calcul.
+**Step 4: Tune the controller.** Choose the gains $K_p$ and $K_d$ of the *Computed Torque Controller*, then set the simulation time and the solver step size.
 
-**Étape 5 : Valider la cinématique.** Vérifier que la MGD est correcte (pour q = 0 : P = [-0,81725 ; -0,19145 ; -0,005491] m), puis que la MGI redonne une pose cohérente : $FK(q_d) \approx FK(q1)$.
+**Step 5: Validate the kinematics.** Check that the FKM is correct (for q = 0: P = [-0.81725 ; -0.19145 ; -0.005491] m), then that the IKM returns a consistent pose: $FK(q_d) \approx FK(q1)$.
 
-**Étape 6 : Lancer la simulation.** Exécuter le modèle et observer le mouvement du robot.
+**Step 6: Run the simulation.** Run the model and observe the robot's motion.
 
-**Étape 7 : Enregistrer les signaux.** Récupérer $q_d$, $q$, $\dot q$, $\ddot q$ et $\tau$ (Scope, *To Workspace* ou sorties du modèle).
+**Step 7: Record the signals.** Retrieve $q_d$, $q$, $\dot q$, $\ddot q$ and $\tau$ (Scope, *To Workspace* or model outputs).
 
-**Étape 8 : Tracer et analyser.** Afficher les courbes décrites en 4.5 et calculer les indicateurs de performance de 4.6.
+**Step 8: Plot and analyze.** Display the curves described in 4.5 and compute the performance indicators from 4.6.
 
-### 4.5. Résultats à présenter
+### 4.5. Results to Present
 ![UR5-Robotic-Manipulation](Images/qd.png)
-* **Figure 4.2** : configuration désirée $q_d$ (sortie de la MGI) et configuration mesurée $q$<br>
+* **Figure 4.2**: desired configuration $q_d$ (IKM output) and measured configuration $q$<br>
 ![UR5-Robotic-Manipulation](Images/q..png)
-* **Figure 4.3** : vitesses articulaires $\dot q$<br>
+* **Figure 4.3**: joint velocities $\dot q$<br>
 ![UR5-Robotic-Manipulation](Images/q...png)
-* **Figure 4.5** : accélérations articulaires $\ddot q$
-* **Figure 4.6** : couples appliqués $\tau$
+* **Figure 4.4**: joint accelerations $\ddot q$<br>
+![UR5-Robotic-Manipulation](Images/torque.png)
+* **Figure 4.5**: applied torques $\tau$
 
-### 4.6. Critères d'évaluation
+### 4.6. Evaluation Criteria
 
-| Indicateur | Description |
+| Indicator | Description |
 |---|---|
-| Erreur de la MGI | Écart entre la pose obtenue $FK(q_d)$ et la pose demandée |
-| Erreur de suivi | $e_i(t) = q_{d,i}(t) - q_i(t)$ |
+| IKM error | Difference between the obtained pose $FK(q_d)$ and the requested pose |
+| Tracking error | $e_i(t) = q_{d,i}(t) - q_i(t)$ |
 | RMSE | $\sqrt{\frac{1}{N}\sum_{k=1}^{N} e_i(k)^2}$ |
-| Temps de réponse | Temps pour atteindre et rester dans la bande d'erreur |
-| Dépassement | Écart maximal au-delà de la position finale |
-| Couple maximal | À comparer aux limites des moteurs du UR5 |
-
-### 4.7. Résultats et discussion
-
-*(À compléter avec tes courbes de simulation.)*
-
-* Les positions mesurées suivent-elles la configuration désirée ?
-* Quelle est l'erreur de suivi maximale et le RMSE de chaque articulation ?
-* Les vitesses, accélérations et couples restent-ils dans des valeurs acceptables ?
-* La MGI converge-t-elle vers une configuration valide ?
+| Response time | Time to reach and remain within the error band |
+| Overshoot | Maximum deviation beyond the final position |
+| Maximum torque | To be compared with the UR5 motor limits |
 
 
 ---
 
-## 5. Conclusion et Perspectives
+## 5. Conclusion and Outlook
 
-*(À rédiger après les résultats de simulation.)*
+### 5.1. Conclusion
+
+This project dealt with the modeling, simulation and control of the **UR5** manipulator arm, a six-degree-of-freedom robot. The study was organized around two axes: kinematics and dynamics.
+
+On the **kinematic** side, the Denavit-Hartenberg parameters were used to establish the forward model (FKM) linking joint angles to the end-effector pose. The inverse model (IKM), solved numerically from the Jacobian, makes it possible to recover the joint configuration corresponding to a desired pose. The analysis of the workspace and singularities showed the robot's geometric limits and the configurations to avoid (shoulder, elbow and wrist), where the Jacobian loses rank.
+
+On the **dynamic** side, the Lagrange formalism led to the equation of motion $M(q)\ddot q + C(q,\dot q)\dot q + G(q) = \tau$, which relates joint torques to the robot's motion. It serves as the basis for inverse dynamics and forward dynamics.
+
+The **simulation** in MATLAB / Simulink made it possible to implement the whole chain: pose computation by the FKM, determination of the desired configuration by the IKM, then **computed torque** control, which compensates for inertia, Coriolis effects and gravity. [The results show that the measured positions follow the desired configuration with a small tracking error, and that the velocities, accelerations and torques remain within consistent values.]
+
+This work allowed me to connect robotics theory (kinematics, dynamics, control) to its concrete implementation in a simulation environment.
+
+### 5.2. Limitations
+
+* The simulation relies on an ideal model: joint friction, sensor noise and uncertainties in the dynamic parameters are not taken into account.
+* Computed torque control assumes an accurate dynamic model; its performance would degrade on a real robot whose parameters are poorly known.
+* The gains $K_p$ and $K_d$ were tuned for the simulation and have not been validated on the physical robot.
+* The computed torques must be compared with the actual actuator limits before any use on hardware.
+
+### 5.3. Future Work
+
+* **Trajectory planning**: generate joint-space trajectories (cubic or quintic polynomials) and Cartesian trajectories (straight lines) for smoother motion.
+* **Pick and Place application**: use the IKM and trajectory planning to simulate a complete manipulation task with a gripper.
+* **Robust or adaptive control**: account for uncertainties and disturbances, for example with an adaptive or sliding-mode controller.
+* **Singularity and obstacle avoidance**: integrate monitoring of the condition number $\kappa(J)$ and collision detection.
+* **Experimental validation**: test the control on a real UR5 robot or in a simulator such as Gazebo / ROS.
