@@ -229,10 +229,6 @@ weights = [0.25 0.25 0.25 1 1 1];         % [orientation position]
 * Les vitesses, accélérations et couples restent-ils dans des valeurs acceptables ?
 * La MGI converge-t-elle vers une configuration valide ?
 
-> ⚠️ Toutes les valeurs présentées doivent provenir de la simulation.
-## 4. Partie Simulation
-
-*(Coller ici la section « 4. Partie Simulation » fournie précédemment, basée sur ton modèle Simulink.)*
 
 ---
 
