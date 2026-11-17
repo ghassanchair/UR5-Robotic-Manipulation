@@ -188,7 +188,7 @@ robot = loadrobot("universalUR5", DataFormat="row");
 ```matlab
 q0 = zeros(1,6);                          % estimation initiale
 q1 = [pi/4 -pi/3 pi/4 -pi/4 pi/3 0];      % configuration à atteindre
-weights = [0.25 0.25 0.25 1 1 1];         % [orientation position]
+weights = [1 1 1 1 1 1];         % [orientation position]
 ```
 
 **Étape 4 : Régler le contrôleur.** Choisir les gains $K_p$ et $K_d$ du *Computed Torque Controller*, puis fixer le temps de simulation et le pas de calcul.
