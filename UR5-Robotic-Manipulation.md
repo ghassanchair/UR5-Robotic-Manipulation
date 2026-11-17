@@ -127,7 +127,7 @@ La simulation est réalisée sous **MATLAB / Simulink** avec la **Robotics Syste
 * **la cinématique** : calcul de la pose de l'effecteur (MGD), puis retour aux angles articulaires (MGI) ;
 * **la dynamique** : commande par couple calculé et réponse du robot sous l'effet des couples appliqués.
 
-![Modèle Simulink du UR5](images/UR5_simulation_environment.png)
+![UR5-Robotic-Manipulation](images/Bloc_im.png)
 *Figure 4.1 : Modèle Simulink (cinématique et dynamique du UR5)*
 
 ### 4.2. Architecture du modèle
@@ -202,9 +202,9 @@ weights = [1 1 1 1 1 1];         % [orientation position]
 **Étape 8 : Tracer et analyser.** Afficher les courbes décrites en 4.5 et calculer les indicateurs de performance de 4.6.
 
 ### 4.5. Résultats à présenter
-
+![UR5-Robotic-Manipulation](qd.png)
 * **Figure 4.2** : configuration désirée $q_d$ (sortie de la MGI) et configuration mesurée $q$
-* **Figure 4.3** : erreur de suivi $e_i(t) = q_{d,i}(t) - q_i(t)$
+
 * **Figure 4.4** : vitesses articulaires $\dot q$
 * **Figure 4.5** : accélérations articulaires $\ddot q$
 * **Figure 4.6** : couples appliqués $\tau$
