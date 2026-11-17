@@ -204,8 +204,8 @@ weights = [1 1 1 1 1 1];         % [orientation position]
 ### 4.5. Résultats à présenter
 ![UR5-Robotic-Manipulation](qd.png)
 * **Figure 4.2** : configuration désirée $q_d$ (sortie de la MGI) et configuration mesurée $q$
-
-* **Figure 4.4** : vitesses articulaires $\dot q$
+![UR5-Robotic-Manipulation](q..png)
+* **Figure 4.3** : vitesses articulaires $\dot q$
 * **Figure 4.5** : accélérations articulaires $\ddot q$
 * **Figure 4.6** : couples appliqués $\tau$
 
